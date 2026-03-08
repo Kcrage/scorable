@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cricket Score Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<h1 class="title">🏏 SCORABLE</h1>
+
+
+
+<!-- SETUP -->
+<div id="setup-screen">
+  <h2>New Match Setup</h2>
+
+  <div class="form-group">
+    <label for="team1-input">Team 1 (Batting First)</label>
+    <input
+      id="team1-input"
+      type="text"
+      placeholder="e.g. India"
+      maxlength="20"
+      aria-label="Team 1 name batting first"
+    />
+  </div>
+  <div class="form-group">
+    <label for="team2-input">Team 2 (Batting Second)</label>
+    <input
+      id="team2-input"
+      type="text"
+      placeholder="e.g. Australia"
+      maxlength="20"
+      aria-label="Team 2 name batting second"
+    />
+  </div>
+  <div class="form-group">
+    <label for="overs-input">Total Overs</label>
+    <input
+      id="overs-input"
+      type="number"
+      placeholder="e.g. 20"
+      min="1"
+      max="50"
+      value=""
+      aria-label="Total number of overs per innings"
+    />
+  </div>
+
+  <!-- ── Rules Section ───────────────────────── -->
+  <div class="rules-section">
+    <div class="rules-title">⚙️ Scoring Rules</div>
+
+    <!-- Wide run toggle -->
+    <div class="rule-row">
+      <div class="rule-info">
+        <span class="rule-name">Wide Ball Run</span>
+      </div>
+      <div class="toggle-wrap">
+        <span class="toggle-off-label" id="wide-off-label">Off</span>
+        <label class="toggle-switch" aria-label="Toggle wide ball run counting">
+          <input
+            type="checkbox"
+            id="wide-run-toggle"
+            checked
+            aria-label="Count runs for wide balls"
+          />
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="toggle-on-label" id="wide-on-label">On</span>
+      </div>
+    </div>
+
+    <!-- No Ball run toggle -->
+    <div class="rule-row">
+      <div class="rule-info">
+        <span class="rule-name">No Ball Run</span>
+      </div>
+      <div class="toggle-wrap">
+        <span class="toggle-off-label" id="noball-off-label">Off</span>
+        <label class="toggle-switch" aria-label="Toggle no ball run counting">
+          <input
+            type="checkbox"
+            id="noball-run-toggle"
+            checked
+            aria-label="Count runs for no balls"
+          />
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="toggle-on-label" id="noball-on-label">On</span>
+      </div>
+    </div>
+  </div>
+  <!-- ──────────────────────────────────────── -->
+
+  <button id="start-btn">Start Match</button>
+</div>
+
+<!-- INNINGS TRANSITION MODAL -->
+<div id="innings-modal" role="dialog" aria-modal="true" aria-labelledby="innings-modal-title">
+  <div class="modal-card">
+    <h2 id="innings-modal-title">Innings Break</h2>
+    <p id="modal-innings-summary"></p>
+    <div class="target-big" id="modal-target"></div>
+    <p id="modal-rrr-needed"></p>
+    <button id="start-2nd-btn">Start 2nd Innings</button>
+  </div>
+</div>
+
+<!-- GAME -->
+<div id="game-screen">
+
+  <!-- Result Banner -->
+  <div id="result-banner" role="alert" aria-live="assertive">
+    <div id="result-text"></div>
+    <button id="new-match-btn">New Match</button>
+  </div>
+
+  <!-- Scoreboard -->
+  <div class="scoreboard" role="region" aria-label="Live scoreboard">
+    <div class="innings-label" id="innings-label">1st Innings</div>
+    <div class="team-score-row">
+      <span class="team-name" id="batting-team-name">Team A</span>
+      <span class="score-main" id="score-display" aria-live="polite">0/0</span>
+    </div>
+    <div class="overs-row">
+      <span class="score-sub" id="overs-display" aria-live="polite">Overs: 0.0 / 20</span>
+      <span class="rrr-badge" id="rrr-badge" aria-live="polite">RRR: —</span>
+    </div>
+    <div class="score-meta-row">
+      <span class="extras-row" id="extras-row" aria-live="polite">Extras: 0</span>
+      <span class="rules-badges" id="rules-badges" aria-label="Active scoring rules"></span>
+    </div>
+  </div>
+
+  <!-- RRR Chase Panel -->
+  <div class="rrr-panel" id="rrr-panel" role="region" aria-label="Required run rate chase panel">
+    <div class="rrr-panel-top">
+      <div class="rrr-col">
+        <span class="rrr-col-label">Need</span>
+        <span class="rrr-col-value" id="rrr-need" aria-live="polite">—</span>
+        <span class="rrr-col-sub">runs</span>
+      </div>
+      <div class="rrr-center">
+        <span class="rrr-label-text">REQ. RATE</span>
+        <span class="rrr-big" id="rrr-big" aria-live="polite">0.00</span>
+        <span class="rrr-label-text">per over</span>
+      </div>
+      <div class="rrr-col">
+        <span class="rrr-col-label">Left</span>
+        <span class="rrr-col-value" id="rrr-balls-left" aria-live="polite">—</span>
+        <span class="rrr-col-sub" id="rrr-overs-left">overs</span>
+      </div>
+    </div>
+    <div class="rrr-bar-wrap">
+      <div class="rrr-bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Chase difficulty">
+        <div class="rrr-bar-fill" id="rrr-bar-fill"></div>
+      </div>
+      <span class="rrr-bar-label" id="rrr-bar-label">Manageable</span>
+    </div>
+  </div>
+
+  <!-- Current Over -->
+  <div class="over-box" role="region" aria-label="Current over balls">
+    <div class="section-title">Current Over</div>
+    <div class="ball-slots" id="ball-slots">
+      <div class="ball-chip" id="slot-0" aria-label="Ball 1">·</div>
+      <div class="ball-chip" id="slot-1" aria-label="Ball 2">·</div>
+      <div class="ball-chip" id="slot-2" aria-label="Ball 3">·</div>
+      <div class="ball-chip" id="slot-3" aria-label="Ball 4">·</div>
+      <div class="ball-chip" id="slot-4" aria-label="Ball 5">·</div>
+      <div class="ball-chip" id="slot-5" aria-label="Ball 6">·</div>
+    </div>
+  </div>
+
+  <!-- Ball History -->
+  <div class="history-label section-title" id="history-label">Ball-by-Ball History</div>
+  <div class="history-box" role="region" aria-labelledby="history-label" tabindex="0">
+    <div class="history-inner" id="history-inner"></div>
+  </div>
+
+  <!-- Scoring Buttons -->
+  <div class="btn-grid" role="group" aria-label="Ball scoring controls">
+    <button class="score-btn btn-dot"    onclick="addBall('dot',0)"    aria-label="Dot ball, no run">Dot</button>
+    <button class="score-btn btn-1"      onclick="addBall('run1',1)"   aria-label="1 run">1</button>
+    <button class="score-btn btn-2"      onclick="addBall('run2',2)"   aria-label="2 runs">2</button>
+    <button class="score-btn btn-3"      onclick="addBall('run3',3)"   aria-label="3 runs">3</button>
+    <button class="score-btn btn-4"      onclick="addBall('run4',4)"   aria-label="4 runs boundary">4 ▸</button>
+    <button class="score-btn btn-6"      onclick="addBall('run6',6)"   aria-label="6 runs maximum">6 ★</button>
+    <button class="score-btn btn-wide"   onclick="addBall('wide',1)"   aria-label="Wide ball">Wide</button>
+    <button class="score-btn btn-noball" onclick="addBall('noball',1)" aria-label="No ball">No Ball</button>
+    <button class="score-btn btn-wicket" onclick="addBall('wicket',0)" aria-label="Wicket out">||| Wicket</button>
+    <button class="score-btn btn-undo"   onclick="undoLast()"          aria-label="Undo last ball">↩ Undo</button>
+  </div>
+
+  <!-- Bottom New Match button -->
+  <button class="btn-new-match-bottom" id="new-match-bottom-btn" aria-label="Start a new match">
+    🔄 New Match
+  </button>
+
+</div>
+
+<script src="app.js"></script>
+<h6 class="author">By Kartik Chauhan</h6>
+</body>
+</html>
