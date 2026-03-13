@@ -1,0 +1,17 @@
+# Compiled Java class files
+bin/
+*.class
+
+# VS Code Java extension cache
+.classpath
+.project
+.settings/
+.factorypath
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+
+# macOS
+.DS_Store

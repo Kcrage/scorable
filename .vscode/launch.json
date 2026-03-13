@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Run CPU Scheduling Simulator",
+            "request": "launch",
+            "mainClass": "cpuscheduler.SchedulerGUI",
+            "projectName": "cpu-scheduling-simulator"
+        }
+    ]
+}
