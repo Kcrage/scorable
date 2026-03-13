@@ -277,7 +277,7 @@ document.getElementById('rrr-overs-left').textContent = 'balls left';
 
 // ── Current Over chips ───────────────────────────
 function renderCurrentOver(inn) {
-  const balls = state.currentOver[inn];
+  const balls = state.currentOver[inn].filter(b => b.legal);
   for (let i = 0; i < 6; i++) {
     const slot = document.getElementById(`slot-${i}`);
     if (i < balls.length) {
