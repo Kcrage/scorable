@@ -399,7 +399,7 @@ background: linear-gradient(90deg,#38bdf8,#22c55e);
   border: 1px solid #0f172a;
 }
 
-.ball-slots { display: flex; gap: 8px; flex-wrap: wrap; }
+.ball-slots { display: flex; gap: 8px; flex-wrap: nowrap; }
 
 .ball-chip {
   width: 38px;
