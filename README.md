@@ -81,7 +81,7 @@ cp .env.example .env
 npm install
 npm run dev
 ```
-Backend runs at: `http://localhost:5000`
+Backend runs at: `http://127.0.0.1:5000`
 
 ### 3) Frontend setup
 ```bash
@@ -89,9 +89,9 @@ cd frontend
 npm install
 npm run dev
 ```
-Frontend runs at: `http://localhost:5173`
+Frontend runs at: `http://127.0.0.1:5173`
 
 If needed, configure API URL in frontend:
 ```bash
-VITE_API_URL=http://localhost:5000/api
+VITE_API_URL=http://127.0.0.1:5000/api
 ```
