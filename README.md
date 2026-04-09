@@ -76,7 +76,7 @@ Places an order using current cart and clears cart.
 
 ### 2) Backend setup
 ```bash
-cd /home/runner/work/scorable/scorable/backend
+cd backend
 cp .env.example .env
 npm install
 npm run dev
@@ -85,7 +85,7 @@ Backend runs at: `http://localhost:5000`
 
 ### 3) Frontend setup
 ```bash
-cd /home/runner/work/scorable/scorable/frontend
+cd frontend
 npm install
 npm run dev
 ```

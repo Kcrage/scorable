@@ -8,6 +8,7 @@ const defaultProducts = require('./data/defaultProducts');
 const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const apiLimiter = require('./middleware/rateLimiter');
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.get('/api/health', (_req, res) => {
   res.status(200).json({ success: true, message: 'Server is running' });
 });
 
+app.use('/api', apiLimiter);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/order', orderRoutes);
